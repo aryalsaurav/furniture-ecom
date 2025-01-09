@@ -1,0 +1,156 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block title %}Home | Renewspace{% endblock %}
+
+{% block content %}
+  <!-- Hero Section -->
+  <div class="hero-section position-relative overflow-hidden">
+    <div class="bg-dark bg-opacity-75 text-white p-5">
+      <div class="container py-5">
+        <div class="row align-items-center">
+          <div class="col-lg-6">
+            <h1 class="display-4 fw-bold mb-4">Quality Furniture, Sustainable Choices</h1>
+            <p class="lead mb-4">
+              Discover unique, pre-loved furniture pieces that bring character to your space while being kind to your wallet and the environment.
+            </p>
+            <div class="d-flex gap-3">
+              <a href="{% url 'furniture:product_list' %}" class="btn btn-primary btn-lg">
+                Browse Collection
+              </a>
+              <a href="#featured" class="btn btn-outline-light btn-lg">
+                View Featured
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Categories Section -->
+  <div class="container py-5">
+    <div class="row g-4 mb-5">
+    {% for category in categories %}
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm text-center h-100">
+          <div class="card-body p-4">
+            <div class="rounded-circle bg-light p-3 d-inline-block mb-3">
+              <i class="fas fa-couch fa-2x text-primary"></i>
+            </div>
+            <h3 class="h5 mb-3">{{category.name}}</h3>
+            <p class="text-muted mb-3">Explore our collection of {{category.name|lower}}.</p>
+            <a href="{% url 'furniture:product_list' %}?category={{category.slug}}" class="btn btn-outline-primary">Shop Now</a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+    </div>
+
+    <!-- Recent Items Section -->
+    <div id="featured" class="mb-5">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">Recently Added</h2>
+        <a href="{% url 'furniture:product_list' %}" class="btn btn-link text-decoration-none">View All →</a>
+      </div>
+      <div class="row g-4">
+        {% for item in recent_furniture %}
+          <div class="col-md-4 col-lg-3">
+            <div class="card h-100 border-0 shadow-sm hover-shadow">
+              <div class="position-relative">
+                {% if item.image %}
+                  <img
+                    src="{{ item.image.url }}"
+                    class="card-img-top"
+                    alt="{{ item.name }}"
+                    style="height: 280px; object-fit: cover;"
+                  />
+                {% else %}
+                  <img
+                    src="{% static 'images/no_image.png' %}"
+                    class="card-img-top"
+                    alt="No Image"
+                    style="height: 280px; object-fit: cover;"
+                  />
+                {% endif %}
+              </div>
+              <div class="card-body p-4">
+                <h5 class="card-title mb-2">{{ item.name }}</h5>
+                <p class="text-primary fw-bold mb-3">${{ item.price }}</p>
+                <a 
+                  href="{% url 'furniture:product_detail' item.slug %}"
+                  class="btn btn-outline-dark w-100"
+                >
+                  View Details
+                </a>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Why Choose Us Section -->
+    <div class="py-5">
+      <h2 class="text-center mb-5">Why Choose Us</h2>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="text-center">
+            <div class="rounded-circle bg-primary bg-opacity-10 p-4 d-inline-block mb-3">
+              <i class="fas fa-shield-alt fa-2x text-primary"></i>
+            </div>
+            <h3 class="h5">Quality Guaranteed</h3>
+            <p class="text-muted">All our furniture is carefully inspected and verified for quality.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="text-center">
+            <div class="rounded-circle bg-primary bg-opacity-10 p-4 d-inline-block mb-3">
+              <i class="fas fa-truck fa-2x text-primary"></i>
+            </div>
+            <h3 class="h5">Free Delivery</h3>
+            <p class="text-muted">Enjoy free delivery on all orders within the city limits.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="text-center">
+            <div class="rounded-circle bg-primary bg-opacity-10 p-4 d-inline-block mb-3">
+              <i class="fas fa-sync fa-2x text-primary"></i>
+            </div>
+            <h3 class="h5">Easy Returns</h3>
+            <p class="text-muted">Not satisfied? Return within 7 days for a full refund.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  .hero-section {
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('{% static "images/hero-bg.jpg" %}') center/cover;
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+  }
+
+  .hover-shadow {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .hover-shadow:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 1rem 3rem rgba(0,0,0,.175)!important;
+  }
+
+  .card {
+    border-radius: 0.5rem;
+  }
+
+  .card-img-top {
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+  }
+</style>
+{% endblock %}

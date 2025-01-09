@@ -1,0 +1,47 @@
+/* General Body Styling */
+body {
+    background-color: #f8f9fa; /* A light grey background for contrast */
+    font-family: "Helvetica Neue", Arial, sans-serif;
+  }
+  
+  /* Navbar Brand Customization */
+  .navbar-brand {
+    font-weight: bold;
+    font-size: 1.25rem;
+    letter-spacing: 0.5px;
+  }
+  
+  /* Customize Card Look */
+  .card {
+    border: none; /* Remove card border */
+    border-radius: 8px; /* Slightly rounded corners */
+    background-color: #ffffff; /* Ensure white background for the card */
+  }
+  
+  /* Headings */
+  h2 {
+    color: #343a40;
+    font-weight: 600;
+  }
+  
+  /* Form Inputs */
+  form input,
+  form select,
+  form textarea {
+    margin-bottom: 1rem;
+  }
+  
+  /* Buttons */
+  .btn {
+    font-weight: 500;
+  }
+  
+  /* Footer */
+  footer {
+    position: relative;
+  }
+  footer p {
+    margin: 0;
+    font-size: 0.9rem;
+  }
+  
