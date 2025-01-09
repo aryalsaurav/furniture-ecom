@@ -100,26 +100,52 @@
           </div>
         </div>
 
+        <!-- Replace the existing buy button section with this -->
         {% if not product.is_sold %}
-          {% if request.user.is_authenticated %}
+        {% if request.user.is_authenticated %}
+            <form method="post" action="{% url 'furniture:create_order' product.slug %}" class="mb-4">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="quantity" class="form-label">Quantity</label>
+                <div class="d-flex gap-2 align-items-center">
+                <button type="button" class="btn btn-outline-secondary" onclick="decrementQuantity()">
+                    <i class="fas fa-minus"></i>
+                </button>
+                <input 
+                    type="number" 
+                    class="form-control text-center" 
+                    id="quantity" 
+                    name="quantity" 
+                    value="1" 
+                    min="1" 
+                    max="{{ product.stock }}"
+                    style="width: 100px;"
+                    required
+                >
+                <button type="button" class="btn btn-outline-secondary" onclick="incrementQuantity()">
+                    <i class="fas fa-plus"></i>
+                </button>
+                </div>
+            </div>
             <div class="d-grid gap-2">
-              <a href="{% url 'furniture:create_order' product.slug %}" 
-                 class="btn btn-outline-primary btn-lg" 
-                 {% if product.stock == 0 %}disabled{% endif %}>
-                Buy Now
-              </a>
+                <button type="submit" 
+                        class="btn btn-primary btn-lg" 
+                        {% if product.stock == 0 %}disabled{% endif %}>
+                Buy Now (Rs: <span id="totalPrice">{{ product.price }}</span>)
+                </button>
             </div>
-          {% else %}
-            <div class="alert alert-warning" role="alert">
-              <i class="fas fa-info-circle me-2"></i>
-              Please <a href="{% url 'user:login' %}" class="alert-link">login</a> to purchase this item.
-            </div>
-          {% endif %}
+            </form>
         {% else %}
-          <div class="alert alert-danger" role="alert">
+            <div class="alert alert-warning" role="alert">
+            <i class="fas fa-info-circle me-2"></i>
+            Please <a href="{% url 'user:login' %}" class="alert-link">login</a> to purchase this item.
+            </div>
+        {% endif %}
+        {% else %}
+        <div class="alert alert-danger" role="alert">
             <i class="fas fa-exclamation-circle me-2"></i>
             This item has been sold!
-          </div>
+        </div>
         {% endif %}
 
         <!-- Additional Product Details -->
@@ -149,6 +175,56 @@
   </div>
   {% endif %}
 </div>
+        <script>
+        function updateMainImage(src) {
+        document.getElementById('mainImage').src = src;
+        }
+
+        // Get elements
+        const quantityInput = document.getElementById('quantity');
+        const totalPriceSpan = document.getElementById('totalPrice');
+        const basePrice = {{ product.price }};
+        const maxStock = {{ product.stock }};
+
+        // Update total price based on quantity
+        function updateTotalPrice() {
+        const quantity = parseInt(quantityInput.value) || 1;
+        const total = basePrice * quantity;
+        totalPriceSpan.textContent = total;
+        }
+
+        // Increment quantity
+        function incrementQuantity() {
+        const currentValue = parseInt(quantityInput.value) || 1;
+        if (currentValue < maxStock) {
+            quantityInput.value = currentValue + 1;
+            updateTotalPrice();
+        }
+        }
+
+        // Decrement quantity
+        function decrementQuantity() {
+        const currentValue = parseInt(quantityInput.value) || 1;
+        if (currentValue > 1) {
+            quantityInput.value = currentValue - 1;
+            updateTotalPrice();
+        }
+        }
+
+        // Listen for manual input changes
+        quantityInput.addEventListener('change', function() {
+        let value = parseInt(this.value) || 1;
+        
+        // Ensure value is within bounds
+        value = Math.max(1, Math.min(value, maxStock));
+        this.value = value;
+        
+        updateTotalPrice();
+        });
+
+        // Initialize
+        updateTotalPrice();
+        </script>
 {% endblock %}
 
 {% block extra_css %}
@@ -182,10 +258,8 @@
 </style>
 {% endblock %}
 
-{% block extra_js %}
-<script>
-function updateMainImage(src) {
-  document.getElementById('mainImage').src = src;
-}
-</script>
-{% endblock %}
+
+
+
+
+

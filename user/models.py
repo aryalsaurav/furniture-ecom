@@ -6,7 +6,11 @@ from django.contrib.auth.models import User
 
 class UserProfile(models.Model):
     user = models.OneToOneField(
-        User, on_delete=models.CASCADE, related_name="user_profile"
+        User,
+        on_delete=models.CASCADE,
+        related_name="user_profile",
+        null=True,
+        blank=True,
     )
     image = models.ImageField(upload_to="users", null=True, blank=True)
     address = models.CharField(max_length=256, null=True, blank=True)

@@ -62,6 +62,6 @@ class Order(models.Model):
     def __str__(self):
         return f"Order #{self.pk} by {self.buyer.username}"
 
-    def save(self):
+    def save(self, *args, **kwargs):
         self.total_price = self.furniture.price * self.quantity
-        super().save()
+        super().save(*args, **kwargs)

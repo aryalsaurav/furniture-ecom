@@ -1,0 +1,27 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block title %}Order Payment{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6 text-center">
+    <h3>Order #{{ order.id }}</h3>
+    <p>Total Amount: <strong>Rs. {{ order.total_price }}</strong></p>
+
+    <!-- Khalti Payment Button -->
+    <a href="{% url 'furniture:order_payment' %}">
+    <button
+      id="khalti-payment-button"
+      class="btn btn-primary"
+      style="margin-top: 20px;"
+    >
+      Pay with Khalti
+    </button>
+    </a>
+    
+  </div>
+</div>
+
+
+{% endblock %}
